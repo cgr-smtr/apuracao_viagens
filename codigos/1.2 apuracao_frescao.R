@@ -14,12 +14,12 @@ pacman::p_load(
   stringr
 )
 
-ano_apurar <- "2023"
-mes_apurar <- "05"
+ano_apurar <- "2025"
+mes_apurar <- "10"
 
-ano_gtfs <- "2023"
-mes_gtfs <- "06"
-quinzena_gtfs <- "01"
+ano_gtfs <- "2026"
+mes_gtfs <- "02"
+quinzena_gtfs <- "02"
 
 basedosdados::set_billing_id("rj-smtr")
 
@@ -395,13 +395,13 @@ apuracao <- function(linha) {
       summarise(media_viagens = round(mean(quantidade_viagens))) %>%
       arrange(desc(tipo_dia), direction_id, faixa_horaria)
 
-    pasta_viagens_brutas <- paste0(pasta_mes, "brutas/")
+    pasta_viagens_brutas <- paste0(pasta_mes, "/brutas/")
 
     ifelse(!dir.exists(file.path(getwd(), pasta_viagens_brutas)),
       dir.create(file.path(getwd(), pasta_viagens_brutas), recursive = T), FALSE
     )
 
-    pasta_viagens_validas <- paste0(pasta_mes, "validas/")
+    pasta_viagens_validas <- paste0(pasta_mes, "/validas/")
 
     ifelse(!dir.exists(file.path(getwd(), pasta_viagens_validas)),
       dir.create(file.path(getwd(), pasta_viagens_validas), recursive = T), FALSE
