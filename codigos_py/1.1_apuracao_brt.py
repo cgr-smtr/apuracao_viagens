@@ -14,18 +14,18 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Configurações
-ano_apurar = "2025"
-mes_apurar = "10"
+ano_apurar = "2026"
+mes_apurar = "03"
 
 ano_gtfs = "2026"
-mes_gtfs = "01"
-quinzena_gtfs = "02"
+mes_gtfs = "03"
+estudo_gtfs = "05"  #ESTUDO, NÃO CONSIDERAR MAIS QUINZENA!!!!
 
 bd.config.billing_id = "rj-smtr"
 client = bigquery.Client(project="rj-smtr")
 
 # Caminhos
-endereco_gtfs = f"../../dados/gtfs/{ano_gtfs}/brt_{ano_gtfs}-{mes_gtfs}-{quinzena_gtfs}Q.zip"
+endereco_gtfs = f"../../dados/gtfs/{ano_gtfs}/brt_{ano_gtfs}-{mes_gtfs}-{estudo_gtfs}Q.zip"
 
 def read_gtfs(path):
     """Lê arquivos essenciais do GTFS de um zip."""
@@ -48,7 +48,7 @@ gtfs['shapes'] = gtfs['shapes'].sort_values(['shape_id', 'shape_pt_sequence'])
 
 # Filtro de linhas BRT (route_type == 702)
 linhas = gtfs['routes'][gtfs['routes']['route_type'].astype(str) == '702']['route_short_name'].unique()
-linhas.sort()
+linhas = np.sort(linhas)
 
 data_ref = datetime.strptime(f"{ano_apurar}-{mes_apurar}-01", "%Y-%m-%d").date()
 
