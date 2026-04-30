@@ -1,0 +1,8 @@
+pandas
+geopandas
+shapely
+numpy
+google-cloud-bigquery
+basedosdados
+tqdm
+pyarrow
