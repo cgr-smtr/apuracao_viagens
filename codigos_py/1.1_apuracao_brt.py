@@ -238,15 +238,17 @@ def apuracao(linha):
         gps_gdf = gps_gdf.merge(shapes_tabela, left_on='direction_id_inferred', right_on='direction_id', how='left')
         
         # ID Viagem
+        gps_gdf['timestamp_gps'] = pd.to_datetime(gps_gdf['timestamp_gps'])
+        
         def make_id_viagem(group):
             start_time = group['timestamp_gps'].min()
             dir_label = "I" if group['direction_id_inferred'].iloc[0] == 0 else "V"
             return f"{group['id_veiculo'].iloc[0]}-{linha}-{dir_label}-{group['shape_id'].iloc[0]}-{start_time.strftime('%Y%m%d%H%M%S')}"
 
-        gps_gdf['id_viagem'] = gps_gdf.groupby(['id_veiculo', 'viagem']).transform(make_id_viagem)
+        ids_viagem = gps_gdf.groupby(['id_veiculo', 'viagem']).apply(make_id_viagem)
+        gps_gdf = gps_gdf.merge(ids_viagem.rename('id_viagem'), on=['id_veiculo', 'viagem'])
         
         # Métricas de tempo
-        gps_gdf['timestamp_gps'] = pd.to_datetime(gps_gdf['timestamp_gps'])
         viagem_stats = gps_gdf.groupby('id_viagem').agg(
             datetime_partida=('timestamp_gps', 'min'),
             datetime_chegada=('timestamp_gps', 'max'),
